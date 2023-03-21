@@ -1,0 +1,1 @@
+To constantly compile server.ts to server.js run `tsc --watch` 
