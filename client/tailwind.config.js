@@ -7,6 +7,9 @@ module.exports = {
       "vdrk-blue": "#07041E",
       "br-red": "#F13B51",
     },
+    fontFamily: {
+      header: ["Cinzel"],
+    },
   },
   plugins: [],
 };
