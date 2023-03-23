@@ -5,7 +5,7 @@ import Homepage from './Homepage';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App bg-vdrk-blue text-br-red">
       <Homepage />
     </div>
   );
