@@ -1,6 +1,7 @@
 import express from 'express';
 import { OpenAIApi, Configuration } from 'openai';
 import dotenv from 'dotenv';
+import fs from 'fs';
 dotenv.config();
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
@@ -24,22 +25,22 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
     console.log("listening on " + port);
 });
-openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: generatePrompt('lynx'),
-    temperature: 0.6,
-})
-    .then((res) => {
-    console.log(res.data.choices[0].text);
+fs.promises.readFile('./promptToolkit.json', { encoding: 'utf8' })
+    .then(value => {
+    let promptToolkit = JSON.parse(value);
+    let prompt = generatePrompt(promptToolkit, 'twoPara');
+    console.log(prompt);
+    // openai.createCompletion({
+    //   model: "text-davinci-003",
+    //   prompt,
+    //   temperature: 0.6,
+    // })
+    // .then((res) => {
+    //   console.log({prompt, res: res.data.choices[0].text});
+    // })
 });
-function generatePrompt(animal) {
-    const capitalizedAnimal = animal[0].toUpperCase() + animal.slice(1).toLowerCase();
-    return `Suggest three names for an animal that is a superhero.
-
-Animal: Cat
-Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
-Animal: Dog
-Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
-Animal: ${capitalizedAnimal}
-Names:`;
+function generatePrompt(promptToolkit, chosenTemplate) {
+    let promptTemplate = promptToolkit.promptTemplates[chosenTemplate];
+    let prompt = promptTemplate.replace(/\&\*\(generalAdjective\)\*\&/g, 'absurd');
+    return prompt;
 }

@@ -1,0 +1,7 @@
+{
+  "generalAdjectives": ["heartwrenching", "surprising", "scary", "disgusting"],
+  "endFeatures": ["twist", "moral lesson", "unconventional boss enemy"],
+  "promptTemplates": {
+    "twoPara": "Write me a scenario for D&D 5th Edition for medium level characters that is &*(generalAdjective)*& and has a &*(generalAdjective)*& twist! Only 2 paragraphs please."
+  }
+}
