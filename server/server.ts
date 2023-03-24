@@ -2,13 +2,9 @@ import express from "express";
 import { OpenAIApi, Configuration, CreateCompletionResponse } from "openai";
 import dotenv from "dotenv";
 import fs from "fs";
+import { promptToolkit } from "./promptGeneration/types";
 dotenv.config();
 
-// When promptToolkit.json structure is nailed down, make this interface
-// more specific and don't use `any`.
-interface promptToolkit {
-  [key: string]: any;
-}
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -65,10 +61,10 @@ function generatePrompt(promptToolkit: promptToolkit, chosenTemplate: string) {
   return prompt;
 }
 
-function generateRandomPrompt(
+export default function generateRandomPrompt(
   promptToolkit: promptToolkit,
   chosenTemplate: string
-) {
+): string {
   const promptTemplate: string = promptToolkit.promptTemplates[chosenTemplate];
   let promptTemplateScaffold = promptTemplate;
   let adjectiveArr = [...promptToolkit.generalAdjectives];
@@ -102,4 +98,6 @@ function generateRandomPrompt(
   
 }
 
+// function pullRandomElement(arr: []): [string[], string] {
 
+// }

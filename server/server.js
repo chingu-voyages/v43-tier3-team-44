@@ -26,7 +26,7 @@ app.listen(port, () => {
     console.log("listening on " + port);
 });
 fs.promises
-    .readFile("./promptToolkit.json", { encoding: "utf8" })
+    .readFile("./promptGeneration/promptToolkit.json", { encoding: "utf8" })
     .then((value) => {
     let promptToolkit = JSON.parse(value);
     let prompt = generateRandomPrompt(promptToolkit, "twoPara");
@@ -47,7 +47,7 @@ function generatePrompt(promptToolkit, chosenTemplate) {
     let prompt = promptTemplate.replace(/\&\*\(generalAdjective\)\*\&/g, "absurd");
     return prompt;
 }
-function generateRandomPrompt(promptToolkit, chosenTemplate) {
+export default function generateRandomPrompt(promptToolkit, chosenTemplate) {
     const promptTemplate = promptToolkit.promptTemplates[chosenTemplate];
     let promptTemplateScaffold = promptTemplate;
     let adjectiveArr = [...promptToolkit.generalAdjectives];
@@ -66,3 +66,5 @@ function generateRandomPrompt(promptToolkit, chosenTemplate) {
     let prompt = promptTemplateScaffold;
     return prompt;
 }
+// function pullRandomElement(arr: []): [string[], string] {
+// }
