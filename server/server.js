@@ -66,5 +66,3 @@ export default function generateRandomPrompt(promptToolkit, chosenTemplate) {
     let prompt = promptTemplateScaffold;
     return prompt;
 }
-// function pullRandomElement(arr: []): [string[], string] {
-// }

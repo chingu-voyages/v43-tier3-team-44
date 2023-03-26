@@ -33,7 +33,7 @@ app.listen(port, () => {
 });
 
 fs.promises
-  .readFile("./promptToolkit.json", { encoding: "utf8" })
+  .readFile("./promptGeneration/promptToolkit.json", { encoding: "utf8" })
   .then((value) => {
     let promptToolkit: promptToolkit = JSON.parse(value);
     let prompt = generateRandomPrompt(promptToolkit, "twoPara");
@@ -98,6 +98,4 @@ export default function generateRandomPrompt(
   
 }
 
-// function pullRandomElement(arr: []): [string[], string] {
 
-// }
