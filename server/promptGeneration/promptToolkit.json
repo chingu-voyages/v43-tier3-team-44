@@ -18,7 +18,84 @@
     "extreme"
   ],
   "endFeatures": ["twist", "moral lesson", "boss enemy"],
+  "monsters": [
+    "Lich",
+    "Mind Flayer",
+    "Goblin",
+    "Dragon",
+    "Ice Troll",
+    "Necromancer"
+  ],
+  "classes": [
+    "Barbarian",
+    "Bard",
+    "Cleric",
+    "Druid",
+    "Fighter",
+    "Monk",
+    "Paladin",
+    "Ranger",
+    "Rogue",
+    "Sorcerer",
+    "Warlock",
+    "Wizard",
+    "Artificer",
+    "Blood Hunter"
+  ],
+  "encounterDifficulties": [
+    "Easy",
+    "Medium",
+    "Hard",
+    "Deadly",
+    "Double Deadly",
+    "Total Party Kill"
+  ],
+  "challengeRatings": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20"
+  ],
+  "playerLevels": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20"
+  ],
   "promptTemplates": {
-    "twoPara": "Write me a scenario for D&D 5th Edition for medium level characters that is &*(generalAdjective)*& and has a(n) &*(generalAdjective)*& &*(endFeature)*&! Only 2 paragraphs please."
+    "twoPara": "Write me a scenario for D&D 5th Edition for medium level characters that is &*(generalAdjective)*& and has a(n) &*(generalAdjective)*& &*(endFeature)*&! Only 2 paragraphs please.",
+    "encounterGenerator": "I need help creating my D&D encounter for my session. In 200 words or less, can you help create an encounter where the party walks into a potential fight? Also, make sure the encounter is a ${levelOfDeadliness} encounter which includes a &*(monster)*& with a challenge rating of &*(challengeRatings)*&. The party is comprised of &*(numOfCharacters)*& level &*(levelOfCharacters)*& characters: 1 bard, 1 barbarian, 1 sorcerer, and 1 druid."
   }
 }

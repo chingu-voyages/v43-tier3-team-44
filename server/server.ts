@@ -5,7 +5,6 @@ import fs from "fs";
 import { promptToolkit } from "./promptGeneration/types";
 dotenv.config();
 
-
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -95,7 +94,5 @@ export default function generateRandomPrompt(
   let prompt = promptTemplateScaffold;
 
   return prompt;
-  
 }
-
 
