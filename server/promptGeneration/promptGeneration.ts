@@ -14,9 +14,11 @@ export default function generateRandomOneshotPrompt(
   let randAdjArr = [];
   for (let i = 1; i <= adjOccurrenceCount; i++) {
     let adjQuantity = adjectiveArr.length;
+    let currentAdj;
+    [currentAdj, adjectiveArr] = pullRandomElement(adjectiveArr);
     promptTemplateScaffold = promptTemplateScaffold.replace(
       /\&\*\(generalAdjective\)\*\&/,
-      adjectiveArr = pullRandomElement(adjectiveArr)
+      currentAdj
     );
   }
   let endFeature = pullRandomElement(endFeatureArr)[0];
