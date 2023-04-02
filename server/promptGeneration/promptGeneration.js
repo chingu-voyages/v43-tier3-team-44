@@ -1,4 +1,4 @@
-export default function generateRandomOneshotPrompt(promptToolkit, chosenTemplate) {
+export function generateRandomOneshotPrompt(promptToolkit, chosenTemplate) {
     const promptTemplate = promptToolkit.promptTemplates[chosenTemplate];
     let promptTemplateScaffold = promptTemplate;
     let adjectiveArr = [...promptToolkit.generalAdjectives];
@@ -17,91 +17,39 @@ export default function generateRandomOneshotPrompt(promptToolkit, chosenTemplat
     let prompt = promptTemplateScaffold;
     return prompt;
 }
-////////// RANDOMIZER //////////
-const monstersArr = [
-    "Lich",
-    "Mind Flayer",
-    "Goblin",
-    "Dragon",
-    "Ice Troll",
-    "Necromancer",
-];
-const [monster] = pullRandomElement(monstersArr);
-const numOfCharactersArr = ["1", "2", "3", "4", "5"];
-const [numOfCharacters] = pullRandomElement(numOfCharactersArr);
-const charactersArr = [
-    "Barbarian",
-    "Bard",
-    "Cleric",
-    "Druid",
-    "Fighter",
-    "Monk",
-    "Paladin",
-    "Ranger",
-    "Rogue",
-    "Sorcerer",
-    "Warlock",
-    "Wizard",
-    "Artificer",
-    "Blood Hunter",
-];
-pullRandomElement(charactersArr);
-const deadlyEncountersArr = [
-    "Easy",
-    "Medium",
-    "Hard",
-    "Deadly",
-    "Double Deadly",
-    "Total Party Kill",
-];
-const [levelOfDeadliness] = pullRandomElement(deadlyEncountersArr);
-//******** An appropriately equipped and well-rested party of four adventurers should be able to defeat a monster that has a challenge rating equal to its level without suffering any deaths. For example, a party of four 3rd-level characters should find a monster with a challenge rating of 3 to be a worthy challenge, but not a deadly one. ********\\
-const challengeRatingsArr = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11",
-    "12",
-    "13",
-    "14",
-    "15",
-    "16",
-    "17",
-    "18",
-    "19",
-    "20",
-];
-const [challengeRatings] = pullRandomElement(challengeRatingsArr);
-const levelOfCharactersArr = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11",
-    "12",
-    "13",
-    "14",
-    "15",
-    "16",
-    "17",
-    "18",
-    "19",
-    "20",
-];
-const [levelOfCharacters] = pullRandomElement(levelOfCharactersArr);
+export function generateRandomEncounterPrompt(promptToolkit, chosenTemplate) {
+    const promptTemplate = promptToolkit.promptTemplates[chosenTemplate];
+    let promptTemplateScaffold = promptTemplate;
+    let { encounterDifficulties, monsters, challengeRatings, numOfPlayers, playerLevels, classes, } = promptToolkit;
+    let playerQuantityString = "";
+    promptTemplateScaffold = chooseAndReplace(promptTemplateScaffold, "encounterDifficulty", encounterDifficulties);
+    promptTemplateScaffold = chooseAndReplace(promptTemplateScaffold, "monster", monsters);
+    promptTemplateScaffold = chooseAndReplace(promptTemplateScaffold, "challengeRating", challengeRatings);
+    [promptTemplateScaffold, playerQuantityString] = chooseAndReplace(promptTemplateScaffold, "numOfPlayers", numOfPlayers);
+    promptTemplateScaffold = chooseAndReplace(promptTemplateScaffold, "playerLevel", playerLevels);
+    for (let i = 1; i < parseInt(playerQuantityString) + 1; i++) {
+        let soughtString = "character(s):";
+        let insertIndex = promptTemplateScaffold.indexOf(soughtString) + soughtString.length;
+        let expandedScaffold = promptTemplateScaffold.slice(0, insertIndex) +
+            (i > 1 ? " &*(class)*&," : " &*(class)*&") +
+            promptTemplateScaffold.slice(insertIndex);
+        promptTemplateScaffold = chooseAndReplace(expandedScaffold, "class", classes);
+        console.log(promptTemplateScaffold);
+    }
+    let prompt = promptTemplateScaffold;
+    return prompt;
+}
+function chooseAndReplace(promptTemplateScaffold, keyToReplace, sourceArr) {
+    const regex = new RegExp(`\\&\\*\\(${keyToReplace}\\)\\*\\&`);
+    let [chosenElement] = pullRandomElement(sourceArr);
+    promptTemplateScaffold = promptTemplateScaffold.replace(regex, chosenElement);
+    if (keyToReplace !== "numOfPlayers") {
+        return promptTemplateScaffold;
+    }
+    else {
+        return [promptTemplateScaffold, chosenElement];
+    }
+}
 /** non-mutating */
 function pullRandomElement(arr) {
     let arrCopy = [...arr];

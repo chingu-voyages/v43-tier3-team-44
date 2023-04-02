@@ -3,6 +3,10 @@ import { OpenAIApi, Configuration, CreateCompletionResponse } from "openai";
 import dotenv from "dotenv";
 import fs from "fs";
 import { promptToolkit } from "./promptGeneration/types";
+import {
+  generateRandomEncounterPrompt,
+  generateRandomOneshotPrompt,
+} from "./promptGeneration/promptGeneration.js";
 dotenv.config();
 
 const configuration = new Configuration({
@@ -35,7 +39,7 @@ fs.promises
   .readFile("./promptGeneration/promptToolkit.json", { encoding: "utf8" })
   .then((value) => {
     let promptToolkit: promptToolkit = JSON.parse(value);
-    let prompt = generateRandomPrompt(promptToolkit, "twoPara");
+    let prompt = generateRandomEncounterPrompt(promptToolkit, 'encounterGenerator');
     console.log(prompt);
     process.exit();
 
@@ -50,49 +54,4 @@ fs.promises
 
     return;
   });
-
-function generatePrompt(promptToolkit: promptToolkit, chosenTemplate: string) {
-  let promptTemplate: string = promptToolkit.promptTemplates[chosenTemplate];
-  let prompt = promptTemplate.replace(
-    /\&\*\(generalAdjective\)\*\&/g,
-    "absurd"
-  );
-  return prompt;
-}
-
-export default function generateRandomPrompt(
-  promptToolkit: promptToolkit,
-  chosenTemplate: string
-): string {
-  const promptTemplate: string = promptToolkit.promptTemplates[chosenTemplate];
-  let promptTemplateScaffold = promptTemplate;
-  let adjectiveArr = [...promptToolkit.generalAdjectives];
-  let endFeatureArr = [...promptToolkit.endFeatures];
-
-  // occurences are length of split arr - 1
-  let adjOccurrenceCount =
-    promptTemplate.split(/\&\*\(generalAdjective\)\*\&/g).length - 1;
-
-  let randAdjArr: string[] = [];
-  for (let i = 1; i <= adjOccurrenceCount; i++) {
-    let adjQuantity = adjectiveArr.length;
-    let randIndex = Math.floor(Math.random() * adjQuantity);
-    promptTemplateScaffold = promptTemplateScaffold.replace(
-      /\&\*\(generalAdjective\)\*\&/,
-      adjectiveArr.splice(randIndex)[0]
-    );
-  }
-
-  let randIndex = Math.floor(Math.random() * endFeatureArr.length);
-  let endFeature = endFeatureArr[randIndex];
-
-  promptTemplateScaffold = promptTemplateScaffold.replace(
-    /\&\*\(endFeature\)\*\&/,
-    endFeature
-  );
-
-  let prompt = promptTemplateScaffold;
-
-  return prompt;
-}
 

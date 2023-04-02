@@ -2,6 +2,7 @@ import express from "express";
 import { OpenAIApi, Configuration } from "openai";
 import dotenv from "dotenv";
 import fs from "fs";
+import { generateRandomEncounterPrompt, } from "./promptGeneration/promptGeneration.js";
 dotenv.config();
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
@@ -29,7 +30,7 @@ fs.promises
     .readFile("./promptGeneration/promptToolkit.json", { encoding: "utf8" })
     .then((value) => {
     let promptToolkit = JSON.parse(value);
-    let prompt = generateRandomPrompt(promptToolkit, "twoPara");
+    let prompt = generateRandomEncounterPrompt(promptToolkit, 'encounterGenerator');
     console.log(prompt);
     process.exit();
     // openai.createCompletion({
@@ -42,27 +43,3 @@ fs.promises
     // })
     return;
 });
-function generatePrompt(promptToolkit, chosenTemplate) {
-    let promptTemplate = promptToolkit.promptTemplates[chosenTemplate];
-    let prompt = promptTemplate.replace(/\&\*\(generalAdjective\)\*\&/g, "absurd");
-    return prompt;
-}
-export default function generateRandomPrompt(promptToolkit, chosenTemplate) {
-    const promptTemplate = promptToolkit.promptTemplates[chosenTemplate];
-    let promptTemplateScaffold = promptTemplate;
-    let adjectiveArr = [...promptToolkit.generalAdjectives];
-    let endFeatureArr = [...promptToolkit.endFeatures];
-    // occurences are length of split arr - 1
-    let adjOccurrenceCount = promptTemplate.split(/\&\*\(generalAdjective\)\*\&/g).length - 1;
-    let randAdjArr = [];
-    for (let i = 1; i <= adjOccurrenceCount; i++) {
-        let adjQuantity = adjectiveArr.length;
-        let randIndex = Math.floor(Math.random() * adjQuantity);
-        promptTemplateScaffold = promptTemplateScaffold.replace(/\&\*\(generalAdjective\)\*\&/, adjectiveArr.splice(randIndex)[0]);
-    }
-    let randIndex = Math.floor(Math.random() * endFeatureArr.length);
-    let endFeature = endFeatureArr[randIndex];
-    promptTemplateScaffold = promptTemplateScaffold.replace(/\&\*\(endFeature\)\*\&/, endFeature);
-    let prompt = promptTemplateScaffold;
-    return prompt;
-}
