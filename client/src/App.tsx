@@ -6,18 +6,15 @@ import Homepage from "./Homepage";
 
 function App() {
   return (
-    <div className="App bg-vdrk-blue text-white min-h-screen flex flex-col justify-center">
+    <div className="App bg-vdrk-blue text-white min-h-screen flex flex-col py-20">
       <Router>
         <Routes>
-        <Route path="/" element={<Homepage />}>
-          
-        </Route>
-         <Route path="/encounter-generator" element={<EncounterGeneratorPage />}>
-          
-        </Route>
-        <Route path="/test" element={"test"}>
-          
-        </Route>
+          <Route path="/" element={<Homepage />}></Route>
+          <Route
+            path="/encounter-generator"
+            element={<EncounterGeneratorPage />}
+          ></Route>
+          <Route path="/test" element={"test"}></Route>
         </Routes>
       </Router>
     </div>
