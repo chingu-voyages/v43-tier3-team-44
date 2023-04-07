@@ -1,6 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import encounterlogo from "../assets/encountergenerator-logo.jpeg";
+import { ChallengeRatings } from "../utils/defaultValues";
 
 const EncounterGeneratorPage = () => {
   return (
@@ -11,7 +13,7 @@ const EncounterGeneratorPage = () => {
       <h1 className="font-header decoration-1 text-4xl text-white mb-5 h-1/6">
         Monster Filter
       </h1>
-      <form action="#" className="w-3/5">
+      <form className="w-3/5">
         <div className="form-group mb-3">
           <label htmlFor="difficulty" className="hidden">
             Difficulty
@@ -30,6 +32,29 @@ const EncounterGeneratorPage = () => {
           </select>
         </div>
         <div className="form-group mb-3">
+          <label htmlFor="challenge-rating" className="hidden">
+            Challenge Rating
+          </label>
+          <select
+            name="challenge-rating"
+            id="difficulty"
+            className="w-4/5 rounded h-10 text-vdrk-blue font-light p-2"
+          >
+            <option value="" disabled selected className="text-light-gray">
+              Challenge Rating
+            </option>
+            {ChallengeRatings.map((num) => {
+              let value;
+              if (num != 0 && num < 1) {
+                value = `1/${1 / num}`;
+              } else {
+                value = num;
+              }
+              return <option value={`${value}`}>{value}</option>;
+            })}
+          </select>
+        </div>
+        <div className="form-group mb-3">
           <label htmlFor="monster-type" className="hidden">
             Monster Type
           </label>
@@ -40,9 +65,11 @@ const EncounterGeneratorPage = () => {
             placeholder="Monster Type"
           />
         </div>
-        <button className="bg-br-red w-5/6 h-10 rounded p-1 ">
-          <span className="font-medium">Next</span>
-        </button>
+        <Link to="/party-characters">
+          <button className="bg-br-red w-5/6 h-10 rounded p-1 ">
+            <span className="font-medium">Next</span>
+          </button>
+        </Link>
       </form>
     </div>
   );
