@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
-import EncounterGeneratorPage from "./EncounterGeneratorPage";
+import EncounterGeneratorPage from "./EncounterGeneratorPage/monsterFilter";
+import PartyCharacters from "./EncounterGeneratorPage/partyCharacters";
 import Homepage from "./Homepage";
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
             path="/encounter-generator"
             element={<EncounterGeneratorPage />}
           ></Route>
-          <Route path="/test" element={"test"}></Route>
+          <Route path="/party-characters" element={<PartyCharacters />}></Route>
         </Routes>
       </Router>
     </div>
