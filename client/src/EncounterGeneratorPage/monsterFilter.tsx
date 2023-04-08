@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import encounterlogo from "../assets/encountergenerator-logo.jpeg";
 import { ChallengeRatings } from "../utils/defaultValues";
 
-const EncounterGeneratorPage = () => {
+const EncounterGeneratorPage = ({ encounter, saveEncounter }) => {
+  // const [formData, setFormData] = React.useState<defaultEncounterValue | {}>();
   return (
     <div className="encounter-generator h-full mx-auto my-0 flex flex-col items-center">
       <div className="img-container w-3/5 mt-5 mb-12">
@@ -21,6 +22,9 @@ const EncounterGeneratorPage = () => {
           <select
             name="difficulty"
             id="difficulty"
+            onChange={(e) => {
+              saveEncounter({ difficulty: e.target.value });
+            }}
             className="w-4/5 rounded h-10 text-vdrk-blue font-light p-2"
           >
             <option value="" disabled selected className="text-light-gray">
@@ -37,8 +41,11 @@ const EncounterGeneratorPage = () => {
           </label>
           <select
             name="challenge-rating"
-            id="difficulty"
+            id="challenge-rating"
             className="w-4/5 rounded h-10 text-vdrk-blue font-light p-2"
+            onChange={(e) => {
+              saveEncounter({ challengeRating: e.target.value });
+            }}
           >
             <option value="" disabled selected className="text-light-gray">
               Challenge Rating
@@ -63,6 +70,9 @@ const EncounterGeneratorPage = () => {
             name="monster-type"
             className="w-4/5 rounded h-10 text-vdrk-blue font-light p-2"
             placeholder="Monster Type"
+            onChange={(e) => {
+              saveEncounter({ monsterType: e.target.value });
+            }}
           />
         </div>
         <Link to="/party-characters">
