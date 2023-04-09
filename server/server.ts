@@ -54,7 +54,7 @@ async function createRoutes() {
           message,
         },
       });
-      console.error(message);
+      // console.error(message);
       return;
     }
 
@@ -72,7 +72,7 @@ async function createRoutes() {
   });
 
   //? ROUTE TO CREATE ENCOUNTER FROM USER INPUT
-  app.post("/createEncounter", cors(), async (req, res) => {
+  app.post("/createEncounter", cors(), async (req, ourServerRes) => {
     const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
     let prompt = generateEncounterWithUserData({
       userPromptValue: body,
@@ -80,9 +80,21 @@ async function createRoutes() {
       chosenTemplate: "encounterGenerator",
     });
 
-    
+    openai.createCompletion({
+      model: "text-davinci-003",
+      prompt,
+      temperature: 0.6,
+      max_tokens: 1000
+    })
+    .then((res) => {
+      let GPTTextRes = res.data.choices[0].text;
+      console.log({prompt, GPTTextRes});
+      ourServerRes.send(GPTTextRes);
+    })
 
-    res.send(prompt);
+
+
+    // res.send(prompt);
   });
   app.listen(port, () => {
     console.log("listening on " + port);

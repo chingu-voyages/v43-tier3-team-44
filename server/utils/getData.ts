@@ -7,7 +7,7 @@ export const getPromptToolkit = async () => {
       return promptToolkit;
     })
     .catch((e) => {
-      console.warn("Something bad happened", e);
+      // console.warn("Something bad happened", e);
       return {};
     });
 };

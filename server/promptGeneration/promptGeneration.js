@@ -2,7 +2,7 @@ export const generateEncounterWithUserData = (param) => {
     const { promptToolkit, chosenTemplate } = param;
     let { userPromptValue } = param;
     userPromptValue = enforceUserPromptValueStringsLength(userPromptValue, 30);
-    console.log(promptToolkit === null || promptToolkit === void 0 ? void 0 : promptToolkit.promptTemplates);
+    // console.log(promptToolkit?.promptTemplates);
     const promptTemplate = promptToolkit === null || promptToolkit === void 0 ? void 0 : promptToolkit.promptTemplates[chosenTemplate];
     let promptTemplateScaffold = promptTemplate;
     let playerQuantityString = "";
@@ -60,7 +60,7 @@ export function generateRandomEncounterPrompt(promptToolkit, chosenTemplate) {
             (i > 1 ? " &*(class)*&," : " &*(class)*&") +
             promptTemplateScaffold.slice(insertIndex);
         [promptTemplateScaffold] = chooseAndReplace(expandedScaffold, "class", classes);
-        console.log(promptTemplateScaffold);
+        // console.log(promptTemplateScaffold);
     }
     let prompt = promptTemplateScaffold;
     return prompt;

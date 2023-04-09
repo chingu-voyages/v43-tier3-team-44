@@ -16,7 +16,7 @@ export const getPromptToolkit = () => __awaiter(void 0, void 0, void 0, function
         return promptToolkit;
     })
         .catch((e) => {
-        console.warn("Something bad happened", e);
+        // console.warn("Something bad happened", e);
         return {};
     });
 });
