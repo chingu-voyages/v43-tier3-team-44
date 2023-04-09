@@ -1,6 +1,6 @@
 import fs from "fs";
-export const getData = () => {
-  return fs.promises
+export const getPromptToolkit = async () => {
+  return await fs.promises
     .readFile("./promptGeneration/promptToolkit.json", { encoding: "utf8" })
     .then((value) => {
       let promptToolkit = JSON.parse(value);
