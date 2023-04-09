@@ -17,15 +17,15 @@ export const generateEncounterWithUserData = (param: {
   let promptTemplateScaffold = promptTemplate;
   let playerQuantityString = "";
 
-  promptTemplateScaffold = chooseAndReplace(
+  [promptTemplateScaffold] = chooseAndReplace(
     promptTemplateScaffold,
     "encounterDifficulty",
     [promptValue?.difficulty || "1"]
   );
-  promptTemplateScaffold = chooseAndReplace(promptTemplateScaffold, "monster", [
+  [promptTemplateScaffold] = chooseAndReplace(promptTemplateScaffold, "monster", [
     promptValue?.monsterType,
   ]);
-  promptTemplateScaffold = chooseAndReplace(
+  [promptTemplateScaffold] = chooseAndReplace(
     promptTemplateScaffold,
     "challengeRating",
     [promptValue?.challengeRating]
@@ -35,7 +35,7 @@ export const generateEncounterWithUserData = (param: {
     "numOfPlayers",
     [String(promptValue?.partyNumber) || "1"]
   );
-  promptTemplateScaffold = chooseAndReplace(
+  [promptTemplateScaffold] = chooseAndReplace(
     promptTemplateScaffold,
     "playerLevel",
     [String(promptValue?.partyAverageLevel)]
@@ -91,17 +91,17 @@ export function generateRandomEncounterPrompt(
   } = promptToolkit;
   let playerQuantityString = "";
 
-  promptTemplateScaffold = chooseAndReplace(
+  [promptTemplateScaffold] = chooseAndReplace(
     promptTemplateScaffold,
     "encounterDifficulty",
     encounterDifficulties
   );
-  promptTemplateScaffold = chooseAndReplace(
+  [promptTemplateScaffold] = chooseAndReplace(
     promptTemplateScaffold,
     "monster",
     monsters
   );
-  promptTemplateScaffold = chooseAndReplace(
+  [promptTemplateScaffold] = chooseAndReplace(
     promptTemplateScaffold,
     "challengeRating",
     challengeRatings
@@ -111,7 +111,7 @@ export function generateRandomEncounterPrompt(
     "numOfPlayers",
     numOfPlayers
   );
-  promptTemplateScaffold = chooseAndReplace(
+  [promptTemplateScaffold] = chooseAndReplace(
     promptTemplateScaffold,
     "playerLevel",
     playerLevels
@@ -126,11 +126,12 @@ export function generateRandomEncounterPrompt(
       promptTemplateScaffold.slice(0, insertIndex) +
       (i > 1 ? " &*(class)*&," : " &*(class)*&") +
       promptTemplateScaffold.slice(insertIndex);
-    promptTemplateScaffold = chooseAndReplace(
+    [promptTemplateScaffold] = chooseAndReplace(
       expandedScaffold,
       "class",
       classes
     );
+    console.log(promptTemplateScaffold);
   }
 
   let prompt = promptTemplateScaffold;
@@ -148,7 +149,7 @@ function chooseAndReplace(
   promptTemplateScaffold = promptTemplateScaffold.replace(regex, chosenElement);
 
   if (keyToReplace !== "numOfPlayers") {
-    return promptTemplateScaffold;
+    return [promptTemplateScaffold];
   } else {
     return [promptTemplateScaffold, chosenElement];
   }
