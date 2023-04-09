@@ -1,5 +1,50 @@
 import { promptToolkit } from "./types";
 
+export const generateEncounterWithUserData = (param: {
+  promptValue: {
+    challengeRating: string;
+    difficulty: string;
+    monsterType: string;
+    partyAverageLevel: number;
+    partyNumber: number;
+  };
+  promptToolkit: promptToolkit;
+  chosenTemplate: string;
+}) => {
+  const { promptValue, promptToolkit, chosenTemplate } = param;
+  console.log(promptToolkit?.promptTemplates);
+  const promptTemplate = promptToolkit?.promptTemplates[chosenTemplate];
+  let promptTemplateScaffold = promptTemplate;
+  let playerQuantityString = "";
+
+  promptTemplateScaffold = chooseAndReplace(
+    promptTemplateScaffold,
+    "encounterDifficulty",
+    [promptValue?.difficulty || "1"]
+  );
+  promptTemplateScaffold = chooseAndReplace(promptTemplateScaffold, "monster", [
+    promptValue?.monsterType,
+  ]);
+  promptTemplateScaffold = chooseAndReplace(
+    promptTemplateScaffold,
+    "challengeRating",
+    [promptValue?.challengeRating]
+  );
+  [promptTemplateScaffold, playerQuantityString] = chooseAndReplace(
+    promptTemplateScaffold,
+    "numOfPlayers",
+    [String(promptValue?.partyNumber) || "1"]
+  );
+  promptTemplateScaffold = chooseAndReplace(
+    promptTemplateScaffold,
+    "playerLevel",
+    [String(promptValue?.partyAverageLevel)]
+  );
+
+  let prompt = promptTemplateScaffold;
+  return prompt;
+};
+
 export function generateRandomOneshotPrompt(
   promptToolkit: promptToolkit,
   chosenTemplate: string
@@ -86,7 +131,6 @@ export function generateRandomEncounterPrompt(
       "class",
       classes
     );
-    console.log(promptTemplateScaffold);
   }
 
   let prompt = promptTemplateScaffold;

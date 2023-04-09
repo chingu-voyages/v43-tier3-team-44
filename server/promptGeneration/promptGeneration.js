@@ -1,3 +1,19 @@
+export const generateEncounterWithUserData = (param) => {
+    const { promptValue, promptToolkit, chosenTemplate } = param;
+    console.log(promptToolkit === null || promptToolkit === void 0 ? void 0 : promptToolkit.promptTemplates);
+    const promptTemplate = promptToolkit === null || promptToolkit === void 0 ? void 0 : promptToolkit.promptTemplates[chosenTemplate];
+    let promptTemplateScaffold = promptTemplate;
+    let playerQuantityString = "";
+    promptTemplateScaffold = chooseAndReplace(promptTemplateScaffold, "encounterDifficulty", [(promptValue === null || promptValue === void 0 ? void 0 : promptValue.difficulty) || "1"]);
+    promptTemplateScaffold = chooseAndReplace(promptTemplateScaffold, "monster", [
+        promptValue === null || promptValue === void 0 ? void 0 : promptValue.monsterType,
+    ]);
+    promptTemplateScaffold = chooseAndReplace(promptTemplateScaffold, "challengeRating", [promptValue === null || promptValue === void 0 ? void 0 : promptValue.challengeRating]);
+    [promptTemplateScaffold, playerQuantityString] = chooseAndReplace(promptTemplateScaffold, "numOfPlayers", [String(promptValue === null || promptValue === void 0 ? void 0 : promptValue.partyNumber) || "1"]);
+    promptTemplateScaffold = chooseAndReplace(promptTemplateScaffold, "playerLevel", [String(promptValue === null || promptValue === void 0 ? void 0 : promptValue.partyAverageLevel)]);
+    let prompt = promptTemplateScaffold;
+    return prompt;
+};
 export function generateRandomOneshotPrompt(promptToolkit, chosenTemplate) {
     const promptTemplate = promptToolkit.promptTemplates[chosenTemplate];
     let promptTemplateScaffold = promptTemplate;
@@ -34,7 +50,6 @@ export function generateRandomEncounterPrompt(promptToolkit, chosenTemplate) {
             (i > 1 ? " &*(class)*&," : " &*(class)*&") +
             promptTemplateScaffold.slice(insertIndex);
         promptTemplateScaffold = chooseAndReplace(expandedScaffold, "class", classes);
-        console.log(promptTemplateScaffold);
     }
     let prompt = promptTemplateScaffold;
     return prompt;

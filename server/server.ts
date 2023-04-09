@@ -1,23 +1,42 @@
 import express from "express";
-import { OpenAIApi, Configuration, CreateCompletionResponse } from "openai";
+import { OpenAIApi, Configuration } from "openai";
 import dotenv from "dotenv";
-import fs from "fs";
-import { promptToolkit } from "./promptGeneration/types";
+import cors from "cors";
+import bodyParser from "body-parser";
+
 import {
   generateRandomEncounterPrompt,
-  generateRandomOneshotPrompt,
+  generateEncounterWithUserData,
 } from "./promptGeneration/promptGeneration.js";
+import { getData } from "./utils/getData.js";
+
 dotenv.config();
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
 const openai = new OpenAIApi(configuration);
 
+// * APP CONFIGURATION
 let app = express();
-const port = 3000;
+const port = 4000;
+app.use(
+  cors({
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+  })
+);
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
+app.use(bodyParser.json());
 
-app.get("/", (req, res) => {
+// * APP ROUTES
+
+// ?DEFAULT APP ROUTE
+app.get("/", async (req, res) => {
   if (!configuration.apiKey) {
     const message = "OpenAI API key not configured, please add it to .env";
     res.status(500).json({
@@ -28,30 +47,41 @@ app.get("/", (req, res) => {
     console.error(message);
     return;
   }
-  res.send("Hello World!");
+
+  const promptToolkit = await getData();
+  let prompt = generateRandomEncounterPrompt(
+    promptToolkit,
+    "encounterGenerator"
+  );
+  // process.exit();
+  // openai.createCompletion({
+  //   model: "text-davinci-003",
+  //   prompt,
+  //   temperature: 0.6,
+  // })
+  // .then((res) => {
+  //   console.log({prompt, res: res.data.choices[0].text});
+  // })
+  return;
 });
 
+// ? ROUTE TO GET MONSTERS IF NEEDED IN FRONTEND
+app.get("/monsters", async (req, res) => {
+  const promptToolkit = await getData();
+  res.send(promptToolkit.monsters);
+});
+
+//? ROUTE TO CREATE ENCOUNTER FROM USER INPUT
+app.post("/createEncounter", cors(), async (req, res) => {
+  const promptToolkit = await getData();
+  const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+  let prompt = generateEncounterWithUserData({
+    promptValue: body,
+    promptToolkit: promptToolkit,
+    chosenTemplate: "encounterGenerator",
+  });
+  res.send(prompt);
+});
 app.listen(port, () => {
   console.log("listening on " + port);
 });
-
-fs.promises
-  .readFile("./promptGeneration/promptToolkit.json", { encoding: "utf8" })
-  .then((value) => {
-    let promptToolkit: promptToolkit = JSON.parse(value);
-    let prompt = generateRandomEncounterPrompt(promptToolkit, 'encounterGenerator');
-    console.log(prompt);
-    process.exit();
-
-    // openai.createCompletion({
-    //   model: "text-davinci-003",
-    //   prompt,
-    //   temperature: 0.6,
-    // })
-    // .then((res) => {
-    //   console.log({prompt, res: res.data.choices[0].text});
-    // })
-
-    return;
-  });
-
