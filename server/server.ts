@@ -19,6 +19,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 // * APP CONFIGURATION
+// TODO: Only enable our origin(s)
 let app = express();
 const port = 4000;
 app.use(
