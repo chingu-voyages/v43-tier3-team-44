@@ -1,4 +1,4 @@
-g
+import { userPromptValue, promptToolkit } from "./types";
 
 export const generateEncounterWithUserData = (param: {
   userPromptValue: userPromptValue;

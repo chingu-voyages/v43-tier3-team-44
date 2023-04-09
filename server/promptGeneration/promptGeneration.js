@@ -1,4 +1,3 @@
-g;
 export const generateEncounterWithUserData = (param) => {
     const { promptToolkit, chosenTemplate } = param;
     let { userPromptValue } = param;
