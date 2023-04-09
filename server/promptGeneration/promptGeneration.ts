@@ -1,17 +1,15 @@
-import { promptToolkit } from "./types";
+g
 
 export const generateEncounterWithUserData = (param: {
-  promptValue: {
-    challengeRating: string;
-    difficulty: string;
-    monsterType: string;
-    partyAverageLevel: number;
-    partyNumber: number;
-  };
+  userPromptValue: userPromptValue;
   promptToolkit: promptToolkit;
   chosenTemplate: string;
 }) => {
-  const { promptValue, promptToolkit, chosenTemplate } = param;
+  const { promptToolkit, chosenTemplate } = param;
+  let { userPromptValue } = param;
+
+  userPromptValue = enforceUserPromptValueStringsLength(userPromptValue, 30);
+
   console.log(promptToolkit?.promptTemplates);
   const promptTemplate = promptToolkit?.promptTemplates[chosenTemplate];
   let promptTemplateScaffold = promptTemplate;
@@ -20,30 +18,44 @@ export const generateEncounterWithUserData = (param: {
   [promptTemplateScaffold] = chooseAndReplace(
     promptTemplateScaffold,
     "encounterDifficulty",
-    [promptValue?.difficulty || "1"]
+    [userPromptValue?.difficulty || "1"]
   );
-  [promptTemplateScaffold] = chooseAndReplace(promptTemplateScaffold, "monster", [
-    promptValue?.monsterType,
-  ]);
+  [promptTemplateScaffold] = chooseAndReplace(
+    promptTemplateScaffold,
+    "monster",
+    [userPromptValue?.monsterType]
+  );
   [promptTemplateScaffold] = chooseAndReplace(
     promptTemplateScaffold,
     "challengeRating",
-    [promptValue?.challengeRating]
+    [userPromptValue?.challengeRating]
   );
   [promptTemplateScaffold, playerQuantityString] = chooseAndReplace(
     promptTemplateScaffold,
     "numOfPlayers",
-    [String(promptValue?.partyNumber) || "1"]
+    [String(userPromptValue?.partyNumber) || "1"]
   );
   [promptTemplateScaffold] = chooseAndReplace(
     promptTemplateScaffold,
     "playerLevel",
-    [String(promptValue?.partyAverageLevel)]
+    [String(userPromptValue?.partyAverageLevel)]
   );
 
   let prompt = promptTemplateScaffold;
   return prompt;
 };
+
+function enforceUserPromptValueStringsLength(userPromptValue: userPromptValue, maxLength: number): userPromptValue {
+  let mutableUserPromptValue = { ...userPromptValue };
+
+  for (const key in userPromptValue) {
+    const typedKey = key as keyof userPromptValue;
+    if (userPromptValue[typedKey].length > 30) {
+      mutableUserPromptValue[typedKey] = userPromptValue[typedKey].slice(0, maxLength);
+    }
+  }
+  return mutableUserPromptValue;
+}
 
 export function generateRandomOneshotPrompt(
   promptToolkit: promptToolkit,

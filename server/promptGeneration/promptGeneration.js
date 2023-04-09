@@ -1,19 +1,30 @@
+g;
 export const generateEncounterWithUserData = (param) => {
-    const { promptValue, promptToolkit, chosenTemplate } = param;
+    const { promptToolkit, chosenTemplate } = param;
+    let { userPromptValue } = param;
+    userPromptValue = enforceUserPromptValueStringsLength(userPromptValue, 30);
     console.log(promptToolkit === null || promptToolkit === void 0 ? void 0 : promptToolkit.promptTemplates);
     const promptTemplate = promptToolkit === null || promptToolkit === void 0 ? void 0 : promptToolkit.promptTemplates[chosenTemplate];
     let promptTemplateScaffold = promptTemplate;
     let playerQuantityString = "";
-    [promptTemplateScaffold] = chooseAndReplace(promptTemplateScaffold, "encounterDifficulty", [(promptValue === null || promptValue === void 0 ? void 0 : promptValue.difficulty) || "1"]);
-    [promptTemplateScaffold] = chooseAndReplace(promptTemplateScaffold, "monster", [
-        promptValue === null || promptValue === void 0 ? void 0 : promptValue.monsterType,
-    ]);
-    [promptTemplateScaffold] = chooseAndReplace(promptTemplateScaffold, "challengeRating", [promptValue === null || promptValue === void 0 ? void 0 : promptValue.challengeRating]);
-    [promptTemplateScaffold, playerQuantityString] = chooseAndReplace(promptTemplateScaffold, "numOfPlayers", [String(promptValue === null || promptValue === void 0 ? void 0 : promptValue.partyNumber) || "1"]);
-    [promptTemplateScaffold] = chooseAndReplace(promptTemplateScaffold, "playerLevel", [String(promptValue === null || promptValue === void 0 ? void 0 : promptValue.partyAverageLevel)]);
+    [promptTemplateScaffold] = chooseAndReplace(promptTemplateScaffold, "encounterDifficulty", [(userPromptValue === null || userPromptValue === void 0 ? void 0 : userPromptValue.difficulty) || "1"]);
+    [promptTemplateScaffold] = chooseAndReplace(promptTemplateScaffold, "monster", [userPromptValue === null || userPromptValue === void 0 ? void 0 : userPromptValue.monsterType]);
+    [promptTemplateScaffold] = chooseAndReplace(promptTemplateScaffold, "challengeRating", [userPromptValue === null || userPromptValue === void 0 ? void 0 : userPromptValue.challengeRating]);
+    [promptTemplateScaffold, playerQuantityString] = chooseAndReplace(promptTemplateScaffold, "numOfPlayers", [String(userPromptValue === null || userPromptValue === void 0 ? void 0 : userPromptValue.partyNumber) || "1"]);
+    [promptTemplateScaffold] = chooseAndReplace(promptTemplateScaffold, "playerLevel", [String(userPromptValue === null || userPromptValue === void 0 ? void 0 : userPromptValue.partyAverageLevel)]);
     let prompt = promptTemplateScaffold;
     return prompt;
 };
+function enforceUserPromptValueStringsLength(userPromptValue, maxLength) {
+    let mutableUserPromptValue = Object.assign({}, userPromptValue);
+    for (const key in userPromptValue) {
+        const typedKey = key;
+        if (userPromptValue[typedKey].length > 30) {
+            mutableUserPromptValue[typedKey] = userPromptValue[typedKey].slice(0, maxLength);
+        }
+    }
+    return mutableUserPromptValue;
+}
 export function generateRandomOneshotPrompt(promptToolkit, chosenTemplate) {
     const promptTemplate = promptToolkit.promptTemplates[chosenTemplate];
     let promptTemplateScaffold = promptTemplate;
