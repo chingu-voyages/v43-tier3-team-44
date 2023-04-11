@@ -8,8 +8,8 @@ const defaultEncounterValue = {
   difficulty: "",
   challengeRating: "",
   monsterType: "",
-  partyNumber: 0,
-  partyAverageLevel: 1,
+  numberOfPlayers: 0,
+  levelOfPlayers: 1,
 };
 
 function App() {
@@ -37,7 +37,7 @@ function App() {
           ></Route>
           <Route
             path="/party-characters"
-            element={<PartyCharacters encounter={encounter} />}
+            element={<PartyCharacters encounter={encounter} saveEncounter={saveEncounter} />}
           ></Route>
         </Routes>
       </Router>
