@@ -19,6 +19,12 @@ const Homepage = () => {
         >
           Create Characters
         </a>
+        <a
+          href="#"
+          className="font-header underline decoration-1 underline-offset-4 text-3xl text-white mt-3"
+        >
+          One Shot Generator
+        </a>
       </div>
       <a href="#" className="mt-5 text-white">
         Sign Up
