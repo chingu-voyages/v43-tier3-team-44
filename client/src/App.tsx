@@ -47,16 +47,7 @@ function App() {
               />
             }
           ></Route>
-          <Route
-            path="/result"
-            element={
-              <Result
-                encounter={encounter}
-                saveEncounter={saveEncounter}
-                result={result}
-              />
-            }
-          ></Route>
+          <Route path="/result" element={<Result result={result} />}></Route>
         </Routes>
       </Router>
     </div>
