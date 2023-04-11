@@ -4,6 +4,7 @@ import "./App.css";
 import EncounterGeneratorPage from "./EncounterGeneratorPage/monsterFilter";
 import PartyCharacters from "./EncounterGeneratorPage/partyCharacters";
 import Homepage from "./Homepage";
+import Result from "./EncounterGeneratorPage/result";
 const defaultEncounterValue = {
   difficulty: "",
   challengeRating: "",
@@ -14,6 +15,7 @@ const defaultEncounterValue = {
 
 function App() {
   const [encounter, setEncounter] = useState(defaultEncounterValue);
+  const [result, setResult] = useState("");
 
   // Use the below function to save the value correctly in the main state
   const saveEncounter = (encounter) => {
@@ -37,7 +39,23 @@ function App() {
           ></Route>
           <Route
             path="/party-characters"
-            element={<PartyCharacters encounter={encounter} saveEncounter={saveEncounter} />}
+            element={
+              <PartyCharacters
+                encounter={encounter}
+                saveEncounter={saveEncounter}
+                setResult={setResult}
+              />
+            }
+          ></Route>
+          <Route
+            path="/result"
+            element={
+              <Result
+                encounter={encounter}
+                saveEncounter={saveEncounter}
+                result={result}
+              />
+            }
           ></Route>
         </Routes>
       </Router>
