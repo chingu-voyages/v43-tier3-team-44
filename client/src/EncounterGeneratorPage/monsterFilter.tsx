@@ -71,7 +71,7 @@ const EncounterGeneratorPage = ({ encounter, saveEncounter }) => {
               Challenge Rating
             </option>
             {ChallengeRatings.map((num) => {
-              let value;
+              let value: any;
               if (num != 0 && num < 1) {
                 value = `1/${1 / num}`;
               } else {

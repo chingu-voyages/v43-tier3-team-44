@@ -33,25 +33,31 @@ export const generateEncounterWithUserData = (param: {
   [promptTemplateScaffold, playerQuantityString] = chooseAndReplace(
     promptTemplateScaffold,
     "numOfPlayers",
-    [String(userPromptValue?.partyNumber) || "1"]
+    [String(userPromptValue?.numberOfPlayers) || "1"]
   );
   [promptTemplateScaffold] = chooseAndReplace(
     promptTemplateScaffold,
     "playerLevel",
-    [String(userPromptValue?.partyAverageLevel)]
+    [String(userPromptValue?.levelOfPlayers)]
   );
 
   let prompt = promptTemplateScaffold;
   return prompt;
 };
 
-function enforceUserPromptValueStringsLength(userPromptValue: userPromptValue, maxLength: number): userPromptValue {
+function enforceUserPromptValueStringsLength(
+  userPromptValue: userPromptValue,
+  maxLength: number
+): userPromptValue {
   let mutableUserPromptValue = { ...userPromptValue };
 
   for (const key in userPromptValue) {
     const typedKey = key as keyof userPromptValue;
     if (userPromptValue[typedKey].length > 30) {
-      mutableUserPromptValue[typedKey] = userPromptValue[typedKey].slice(0, maxLength);
+      mutableUserPromptValue[typedKey] = userPromptValue[typedKey].slice(
+        0,
+        maxLength
+      );
     }
   }
   return mutableUserPromptValue;

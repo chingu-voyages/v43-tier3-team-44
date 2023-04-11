@@ -9,8 +9,8 @@ export const generateEncounterWithUserData = (param) => {
     [promptTemplateScaffold] = chooseAndReplace(promptTemplateScaffold, "encounterDifficulty", [(userPromptValue === null || userPromptValue === void 0 ? void 0 : userPromptValue.difficulty) || "1"]);
     [promptTemplateScaffold] = chooseAndReplace(promptTemplateScaffold, "monster", [userPromptValue === null || userPromptValue === void 0 ? void 0 : userPromptValue.monsterType]);
     [promptTemplateScaffold] = chooseAndReplace(promptTemplateScaffold, "challengeRating", [userPromptValue === null || userPromptValue === void 0 ? void 0 : userPromptValue.challengeRating]);
-    [promptTemplateScaffold, playerQuantityString] = chooseAndReplace(promptTemplateScaffold, "numOfPlayers", [String(userPromptValue === null || userPromptValue === void 0 ? void 0 : userPromptValue.partyNumber) || "1"]);
-    [promptTemplateScaffold] = chooseAndReplace(promptTemplateScaffold, "playerLevel", [String(userPromptValue === null || userPromptValue === void 0 ? void 0 : userPromptValue.partyAverageLevel)]);
+    [promptTemplateScaffold, playerQuantityString] = chooseAndReplace(promptTemplateScaffold, "numOfPlayers", [String(userPromptValue === null || userPromptValue === void 0 ? void 0 : userPromptValue.numberOfPlayers) || "1"]);
+    [promptTemplateScaffold] = chooseAndReplace(promptTemplateScaffold, "playerLevel", [String(userPromptValue === null || userPromptValue === void 0 ? void 0 : userPromptValue.levelOfPlayers)]);
     let prompt = promptTemplateScaffold;
     return prompt;
 };
