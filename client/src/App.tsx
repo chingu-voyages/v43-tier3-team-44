@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import EncounterGeneratorPage from "./EncounterGeneratorPage/monsterFilter";
 import PartyCharacters from "./EncounterGeneratorPage/partyCharacters";
@@ -24,7 +24,7 @@ function App() {
     });
   };
   return (
-    <div className="App bg-vdrk-blue text-white min-h-screen flex flex-col py-20">
+    <div className="App bg-vdrk-blue text-white min-h-screen flex flex-col pt-10">
       <Router>
         <Routes>
           <Route path="/" element={<Homepage />}></Route>
