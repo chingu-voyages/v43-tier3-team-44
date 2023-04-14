@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "test": "jest",
-    "start": "nodemon server.js"
+    "start:watch": "nodemon server.js",
+    "build": "npm --prefix ../client i && npm --prefix ../client run build && tsc",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",

@@ -3,6 +3,7 @@ import { OpenAIApi, Configuration } from "openai";
 import dotenv from "dotenv";
 import cors from "cors";
 import bodyParser from "body-parser";
+import path from "path";
 
 import {
   generateRandomEncounterPrompt,
@@ -19,34 +20,39 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-
 // * APP CONFIGURATION
 // TODO: Only enable our origin(s)
 let app = express();
-const port = 4000;
-app.use(
-  cors({
-    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
-  })
-);
 app.use(
   bodyParser.urlencoded({
     extended: true,
   })
 );
 app.use(bodyParser.json());
-
+const port = 4000;
+app.use(
+  cors({
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+  })
+);
 
 createRoutes();
 
 // * APP ROUTES
 async function createRoutes() {
+  const promptToolkit: promptToolkit = await getPromptToolkit();
 
+  const __dirname = path.resolve();
 
-   const promptToolkit: promptToolkit = await getPromptToolkit();
+  app.use(express.static(path.resolve(__dirname, "../client/build")));
+
+  // All other GET requests not handled before will return our React app
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+  });
 
   // ?DEFAULT APP ROUTE
-  app.get("/", async (req, res) => {
+  app.get("/randomPrompt", async (req, res) => {
     if (!configuration.apiKey) {
       const message = "OpenAI API key not configured, please add it to .env";
       res.status(500).json({
@@ -62,7 +68,7 @@ async function createRoutes() {
       promptToolkit,
       "encounterGenerator"
     );
-   
+
     return;
   });
 
@@ -80,19 +86,18 @@ async function createRoutes() {
       chosenTemplate: "encounterGenerator",
     });
 
-    openai.createCompletion({
-      model: "text-davinci-003",
-      prompt,
-      temperature: 0.6,
-      max_tokens: 1000
-    })
-    .then((res) => {
-      let GPTTextRes = res.data.choices[0].text;
-      console.log({prompt, GPTTextRes});
-      ourServerRes.send(GPTTextRes);
-    })
-
-
+    openai
+      .createCompletion({
+        model: "text-davinci-003",
+        prompt,
+        temperature: 0.6,
+        max_tokens: 1000,
+      })
+      .then((res) => {
+        let GPTTextRes = res.data.choices[0].text;
+        console.log({ prompt, GPTTextRes });
+        ourServerRes.send(GPTTextRes);
+      });
 
     // res.send(prompt);
   });

@@ -64,10 +64,7 @@ const PartyCharacters = ({ encounter, saveEncounter, setResult }) => {
           <button
             className="bg-br-red w-5/6 h-10 rounded p-1 "
             onClick={async () => {
-              await postData(
-                "http://localhost:4000/createEncounter",
-                encounter
-              );
+              await postData("/createEncounter", encounter);
               console.log(encounter);
             }}
           >
