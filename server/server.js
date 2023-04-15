@@ -12,6 +12,7 @@ import { OpenAIApi, Configuration } from "openai";
 import dotenv from "dotenv";
 import cors from "cors";
 import bodyParser from "body-parser";
+import path from "path";
 import { generateRandomEncounterPrompt, generateEncounterWithUserData, } from "./promptGeneration/promptGeneration.js";
 import { getPromptToolkit } from "./utils/getData.js";
 dotenv.config();
@@ -22,21 +23,27 @@ const openai = new OpenAIApi(configuration);
 // * APP CONFIGURATION
 // TODO: Only enable our origin(s)
 let app = express();
-const port = 4000;
-app.use(cors({
-    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
-}));
 app.use(bodyParser.urlencoded({
     extended: true,
 }));
 app.use(bodyParser.json());
+const port = 4000;
+app.use(cors({
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+}));
 createRoutes();
 // * APP ROUTES
 function createRoutes() {
     return __awaiter(this, void 0, void 0, function* () {
         const promptToolkit = yield getPromptToolkit();
+        const __dirname = path.resolve();
+        app.use(express.static(path.resolve(__dirname, "../client/build")));
+        // All other GET requests not handled before will return our React app
+        app.get("*", (req, res) => {
+            res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+        });
         // ?DEFAULT APP ROUTE
-        app.get("/", (req, res) => __awaiter(this, void 0, void 0, function* () {
+        app.get("/randomPrompt", (req, res) => __awaiter(this, void 0, void 0, function* () {
             if (!configuration.apiKey) {
                 const message = "OpenAI API key not configured, please add it to .env";
                 res.status(500).json({
@@ -62,11 +69,12 @@ function createRoutes() {
                 promptToolkit: promptToolkit,
                 chosenTemplate: "encounterGenerator",
             });
-            openai.createCompletion({
+            openai
+                .createCompletion({
                 model: "text-davinci-003",
                 prompt,
                 temperature: 0.6,
-                max_tokens: 1000
+                max_tokens: 1000,
             })
                 .then((res) => {
                 let GPTTextRes = res.data.choices[0].text;
